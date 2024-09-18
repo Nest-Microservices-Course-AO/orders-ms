@@ -1,12 +1,16 @@
 steps:
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - -c
       - |
         docker build -t northamerica-northeast1-docker.pkg.dev/tienda-ms/image-registry/orders-ms -f dockerfile.prod --platform=linux/amd64 --build-arg ORDERS_DATABASE_URL=$DATABASE_URL .
+
+    # Here you are telling Cloud Build to load the DATABASE_URL secret as an environment variable
     secretEnv: ['DATABASE_URL']
 
+  # Step 2: Push the Docker image to the registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
@@ -14,9 +18,11 @@ steps:
         'northamerica-northeast1-docker.pkg.dev/tienda-ms/image-registry/orders-ms',
       ]
 
+# Available secrets configuration, linking the secret in Secret Manager to the DATABASE_URL env var
 availableSecrets:
   secretManager:
     - versionName: projects/320053769386/secrets/ORDERS_DATABASE_URL/versions/1
       env: 'DATABASE_URL'
+
 options:
   logging: CLOUD_LOGGING_ONLY
