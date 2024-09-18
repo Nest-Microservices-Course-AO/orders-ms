@@ -5,7 +5,7 @@ steps:
     args:
       - -c
       - |
-        docker build -t northamerica-northeast1-docker.pkg.dev/tienda-ms/image-registry/orders-ms -f dockerfile.prod --platform=linux/amd64 --build-arg ORDERS_DATABASE_URL=$DATABASE_URL .
+        docker build -t northamerica-northeast1-docker.pkg.dev/tienda-ms/image-registry/orders-ms -f dockerfile.prod --platform=linux/amd64 --build-arg ORDERS_DATABASE_URL=$$DATABASE_URL .
 
     # Here you are telling Cloud Build to load the DATABASE_URL secret as an environment variable
     secretEnv: ['DATABASE_URL']
